@@ -76,7 +76,8 @@ cells += [
          "if not have(f'cand_v{V}_test.parquet'):",
          "    !python src/blocking.py test"),
     code("!python src/blocking_eval.py"),
-    md("## 3. Train pair classifier, tune threshold for macro F0.5, analyse errors"),
+    md("## 3. Train pair classifier, tune threshold for macro F0.5, analyse errors\n"
+       "Rarity and similarity-competition features are computed here, so a v3 cache (same `V`) is reused."),
     code("!python src/train.py --train-folds 0,2 --sample 0.75 --val-fold 1 --val-sample 0.5 --model {MODEL}"),
     code("!python src/error_analysis.py"),
     md("## 4. Predict test + write outputs"),

@@ -47,7 +47,15 @@ crashed at the training stage. Regenerate the single-file Kaggle notebook after 
 - v2 (this code): three-channel blocking union, LightGBM lr 0.1 with early stopping on folds 0+2,
   optional XGBoost-GPU backend, saved validation predictions + error analysis, parquet cache reuse on
   Kaggle. Verified end-to-end on the 20k slice (both backends, validator PASS with `--check-ids`);
-  full-size run pending.
+  Full run: validation macro F0.5 **0.9675** (India 0.960, US 0.973), threshold 0.725.
+  Error analysis (F0.5 if the category alone were fixed): true pair missing from candidates +0.0174,
+  true pair below threshold +0.0101 (mostly bare-name S2/S3 records without address), wrong merge
+  with a distractor +0.0037, wrong merge with a record owned by another S1 +0.0021.
+- v3: Indic back-transliteration, forward K=20 + reverse K=5, XGBoost GPU.
+- v4 (this code, same normalization/blocking cache as v3): record rarity counts (how many S1s share
+  this exact name / address, rarest-name-token frequency) and similarity-aware competition features
+  (name/address similarity of this pair vs. every other S1 competing for the same record, and vs. the
+  S1's other candidates) — targets the bare-name misses and the same-address wrong merges.
 
 ## Key data findings (details in `eda/*_out.txt`)
 
@@ -62,8 +70,9 @@ crashed at the training stage. Regenerate the single-file Kaggle notebook after 
 
 ## Next steps
 
-1. Run v2 on Kaggle → compare union blocking recall and validation F0.5 against v1 (0.9577).
-2. Act on error_analysis.py output (largest-cost category first).
-3. Learn an Indic→English word dictionary from aligned training pairs (remaining blocking misses are
-   mostly fully transliterated names, e.g. `kpiyuccr tevlpprs` = "future developers").
+1. Run v4 on the v3 cache → compare validation F0.5 against v2 (0.9675) / v3.
+2. Blocking misses (largest cost): acronym key (`jemie snow generating` ↔ `jsg`), phonetic/skeleton
+   keys for heavily misspelled names, house-number prefix/suffix truncation (`1661` ↔ `661`).
+3. Second-stage model on the S1 side (its matches in the other source, how many strong matches it
+   already has), trained with cross-fitting.
 4. Fine-tuned multilingual bi-encoder as an extra blocking channel + feature (the hybrid step).

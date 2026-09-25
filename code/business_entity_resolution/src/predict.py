@@ -34,10 +34,9 @@ def main():
     meta = json.load(open(WORK_DIR / "model_meta.json"))
     backend = meta["backend"]
     model = M.load(backend)
-    cand = load_candidates("test")
-    print(f"test candidate pairs {cand.height:,} ({time.time()-t0:.0f}s)")
-
     n1, no_all, n2_len = load_norm("test")
+    cand = load_candidates("test", n1, no_all, n2_len)
+    print(f"test candidate pairs {cand.height:,} ({time.time()-t0:.0f}s)")
     probs = []
     with Pool(N_JOBS) as pool:
         for i in range(0, cand.height, 4_000_000):

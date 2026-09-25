@@ -18,7 +18,7 @@ import model as M
 from blocking_eval import truth_index
 from config import N_JOBS, SEED, WORK_DIR, cand_path, norm_path
 from decide import assign
-from features import context_features, feature_columns, pair_features
+from features import add_record_stats, context_features, feature_columns, pair_features, sim_context
 from metrics import macro_f05
 
 NORM_COLS = ["core", "compact", "name_n", "addr_n", "anums", "name_nums", "legal",
@@ -30,11 +30,15 @@ def load_norm(split):
     n1 = pl.read_parquet(norm_path(split, 1), columns=NORM_COLS)
     n2 = pl.read_parquet(norm_path(split, 2), columns=NORM_COLS)
     n3 = pl.read_parquet(norm_path(split, 3), columns=NORM_COLS)
+    n1, n2, n3 = add_record_stats(n1, n2, n3)
     return n1, pl.concat([n2, n3]), n2.height
 
 
-def load_candidates(split):
-    return context_features(pl.read_parquet(cand_path(split)))
+def load_candidates(split, n1, no_all, n2_len):
+    t = time.time()
+    cand = sim_context(context_features(pl.read_parquet(cand_path(split))), n1, no_all, n2_len)
+    print(f"{split} candidates {cand.height:,} with context features ({time.time() - t:.0f}s)", flush=True)
+    return cand
 
 
 def featurize(pairs, n1, no_all, n2_len, pool):
@@ -56,7 +60,8 @@ def main():
     t0 = time.time()
 
     truth, n_s1 = truth_index()
-    cand = load_candidates("train").with_columns(fold=(pl.col("i1") % 5).cast(pl.Int8))
+    n1, no_all, n2_len = load_norm("train")
+    cand = load_candidates("train", n1, no_all, n2_len).with_columns(fold=(pl.col("i1") % 5).cast(pl.Int8))
     cand = cand.join(truth.with_columns(label=pl.lit(1, pl.Int8)), on=["i1", "io", "src"], how="left") \
                .with_columns(pl.col("label").fill_null(0))
     train_folds = [int(f) for f in args.train_folds.split(",")]
@@ -71,7 +76,6 @@ def main():
     del cand
     print(f"train pairs {tr.height:,} (pos {tr['label'].sum():,}) | val pairs {va.height:,} ({time.time()-t0:.0f}s)")
 
-    n1, no_all, n2_len = load_norm("train")
     with Pool(N_JOBS) as pool:
         tr = featurize(tr, n1, no_all, n2_len, pool)
         feats = [c for c in feature_columns(tr) if c != "label"]

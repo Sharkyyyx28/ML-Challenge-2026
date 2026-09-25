@@ -9,6 +9,9 @@ Feature groups (all country-agnostic, no country identity used as a feature):
   * record-quality flags: non-latin script, domain-style name, missing address
   * blocking context: score, rank, gap to best candidate, and the reverse view
     (how this S2/S3 record ranks among all S1 records that retrieved it)
+  * record rarity: how many S1s share this exact name / address, rarest name-token frequency
+  * similarity competition: this pair's name/address similarity vs. the other S1s competing for
+    the same record and vs. the S1's other candidates
 """
 from multiprocessing import Pool
 
@@ -100,6 +103,85 @@ def context_features(cand):
     ).drop("s1_second", "o_second")
 
 
+RS_COLS = ["rs_nm_s1", "rs_ad_s1", "rs_nm_other", "rs_tokdf"]
+
+
+def _addr_key(df):
+    return pl.when(df["addr_missing"]).then(pl.lit("")).otherwise(df["anums"] + "|" + df["addr_n"])
+
+
+def add_record_stats(n1, n2, n3):
+    """Per-record rarity counts over the whole split (no labels involved):
+      rs_nm_s1    S1 records with this exact core name   (is the name ambiguous among owners?)
+      rs_ad_s1    S1 records at this exact address       (shared building / office block?)
+      rs_nm_other S1 row: S2+S3 records with this name; S2/S3 row: same-source records with it
+      rs_tokdf    records (all sources) containing this name's rarest core token
+    A bare name with no address can only be linked safely when the name is rare; these let the
+    model tell 'becerra montessori school' (unique) from 'new delhi services' (many owners)."""
+    frames = [n1.select("core", ak=_addr_key(n1)), n2.select("core", ak=_addr_key(n2)),
+              n3.select("core", ak=_addr_key(n3))]
+    cnt = lambda s, name: (s.filter(s != "").value_counts(name="c").rename({s.name: "k"})
+                           .with_columns(pl.col("c").cast(pl.Float32)).rename({"c": name}))
+    nm1 = cnt(frames[0]["core"], "rs_nm_s1")
+    ad1 = cnt(frames[0]["ak"], "rs_ad_s1")
+    nm2, nm3 = cnt(frames[1]["core"], "n"), cnt(frames[2]["core"], "n")
+    nm23 = pl.concat([nm2, nm3]).group_by("k").agg(pl.col("n").sum().alias("rs_nm_other"))
+    tok = (pl.concat([f.select(pl.col("core").str.split(" ").list.unique().alias("t")) for f in frames])
+           .explode("t").filter(pl.col("t") != "")["t"].value_counts(name="d").rename({"t": "k"}))
+
+    def attach(f, other):
+        f = f.with_row_index("r")
+        mind = (f.select("r", t=pl.col("core").str.split(" ")).explode("t").filter(pl.col("t") != "")
+                .join(tok, left_on="t", right_on="k").group_by("r").agg(rs_tokdf=pl.col("d").min().cast(pl.Float32)))
+        out = (f.join(nm1, left_on="core", right_on="k", how="left")
+               .join(ad1, left_on="ak", right_on="k", how="left")
+               .join(other, left_on="core", right_on="k", how="left")
+               .join(mind, on="r", how="left").sort("r"))
+        return out.select(pl.col(RS_COLS).fill_null(0))
+
+    return (n1.hstack(attach(frames[0], nm23)),
+            n2.hstack(attach(frames[1], nm2.rename({"n": "rs_nm_other"}))),
+            n3.hstack(attach(frames[2], nm3.rename({"n": "rs_nm_other"}))))
+
+
+def sim_context(cand, n1, no_all, n2_len, chunk=4_000_000):
+    """Similarity-aware version of the blocking-context features, computed over the FULL candidate
+    table (every S1 that retrieved a record competes, whatever its fold). Blocking cosine says little
+    about *which* of several same-address or same-name S1s owns a record; name/address similarity
+    relative to the competing candidates does:
+      o_*  : over the S1s competing for this S2/S3 record   s1_* : over this S1's own candidates
+      *_js_best / *_js_gap / o_js_rank on js = name token-sort + 0.5 * full-address token-set
+      *_ns_best / *_ns_gap on name token-sort; *_n90 = competitors with name token-sort >= 90."""
+    fa1 = (n1["anums"] + " " + n1["addr_n"]).to_list()
+    fao = (no_all["anums"] + " " + no_all["addr_n"]).to_list()
+    c1, co = n1["core"].to_list(), no_all["core"].to_list()
+    i1 = cand["i1"].to_numpy()
+    io = cand["io"].to_numpy() + np.where(cand["src"].to_numpy() == 3, n2_len, 0)
+    ns, as_ = np.empty(len(i1), np.float32), np.empty(len(i1), np.float32)
+    for s in range(0, len(i1), chunk):
+        a, b = i1[s:s + chunk], io[s:s + chunk]
+        ns[s:s + chunk] = _sim([c1[j] for j in a], [co[j] for j in b], fuzz.token_sort_ratio)
+        as_[s:s + chunk] = _sim([fa1[j] for j in a], [fao[j] for j in b], fuzz.token_set_ratio)
+    del fa1, fao, c1, co
+    o, s1 = ["io", "src"], ["i1", "src"]
+    return cand.with_columns(c_ns=pl.Series(ns), c_fa_tset=pl.Series(as_)).with_columns(
+        c_js=pl.col("c_ns") + 0.5 * pl.col("c_fa_tset"),
+    ).with_columns(
+        o_js_best=pl.col("c_js").max().over(o),
+        o_ns_best=pl.col("c_ns").max().over(o),
+        o_n90=(pl.col("c_ns") >= 90).sum().over(o).cast(pl.Float32),
+        o_js_rank=(pl.col("c_js").rank("min", descending=True).over(o) - 1).cast(pl.Float32),
+        s1_js_best=pl.col("c_js").max().over(s1),
+        s1_ns_best=pl.col("c_ns").max().over(s1),
+        s1_n90=(pl.col("c_ns") >= 90).sum().over(s1).cast(pl.Float32),
+    ).with_columns(
+        o_js_gap=pl.col("o_js_best") - pl.col("c_js"),
+        o_ns_gap=pl.col("o_ns_best") - pl.col("c_ns"),
+        s1_js_gap=pl.col("s1_js_best") - pl.col("c_js"),
+        s1_ns_gap=pl.col("s1_ns_best") - pl.col("c_ns"),
+    ).drop("c_ns")
+
+
 def pair_features(pairs, n1, no_all, n2_len, pool=None):
     """pairs: DataFrame with i1, io, src (+ context cols). n1: normalized S1; no_all: normalized S2
     and S3 stacked (S3 rows offset by n2_len). Returns pairs with feature columns appended."""
@@ -136,6 +218,8 @@ def pair_features(pairs, n1, no_all, n2_len, pool=None):
         o_addr_missing=b["addr_missing"].cast(pl.Float32),
         s1_addr_missing=a["addr_missing"].cast(pl.Float32),
         **_legal_feats(a["legal"], b["legal"]),
+        **{f"a_{c}": a[c] for c in RS_COLS},
+        **{f"b_{c}": b[c] for c in RS_COLS},
     )
     rows = list(zip(a["anums"].to_list(), b["anums"].to_list(), a["name_nums"].to_list(), b["name_nums"].to_list()))
     chunks = [rows[i:i + 50000] for i in range(0, len(rows), 50000)]
