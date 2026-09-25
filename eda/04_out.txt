@@ -1,0 +1,123 @@
+S1 distinct name keys: 1317066 of 2206821
+S1 rows whose name key is shared with another S1: 1094223
+shape: (15, 2)
+┌───────────────────────┬─────┐
+│ k                     ┆ len │
+│ ---                   ┆ --- │
+│ str                   ┆ u32 │
+╞═══════════════════════╪═════╡
+│ meridian              ┆ 560 │
+│ apex                  ┆ 353 │
+│ cedar                 ┆ 346 │
+│ cascade               ┆ 331 │
+│ summit                ┆ 329 │
+│ family center         ┆ 327 │
+│ helios                ┆ 319 │
+│ pinnacle              ┆ 317 │
+│ sterling              ┆ 314 │
+│ sapphire              ┆ 311 │
+│ granite               ┆ 309 │
+│ amber                 ┆ 308 │
+│ ear nose throat group ┆ 308 │
+│ lynx                  ┆ 307 │
+│ ember                 ┆ 302 │
+└───────────────────────┴─────┘
+
+example same-key S1 group:
+ shape: (3, 3)
+┌─────────────────────────────────┬──────────────────────────────────────────────────────┬─────────┐
+│ business_name                   ┆ business_address                                     ┆ country │
+│ ---                             ┆ ---                                                  ┆ ---     │
+│ str                             ┆ str                                                  ┆ str     │
+╞═════════════════════════════════╪══════════════════════════════════════════════════════╪═════════╡
+│ Anilika Freight Private Limited ┆ Panigrahi Chamber, Infront Of Petrol Pump Gopal      ┆ India   │
+│                                 ┆ Vihar, Bhatra, Po-Ps-D…                              ┆         │
+│ Anilika Freight Corporation     ┆ Gala No. 6, Bldg. No. 1-4, Shri Arihant Complex,     ┆ India   │
+│                                 ┆ Kopar, Thane, Maharas…                               ┆         │
+│ Anilika Freight Company         ┆ Flat No B2 Ganga Block Triveni Complex, Hyderabad,   ┆ India   │
+│                                 ┆ Telangana, Habsigud…                                 ┆         │
+└─────────────────────────────────┴──────────────────────────────────────────────────────┴─────────┘
+
+S2: name-key exact hit rate into S1 & mean #S1 sharing key
+shape: (2, 4)
+┌────────┬──────────┬──────────┬───────────┐
+│ is_pos ┆ hit      ┆ hits_ge2 ┆ mean_hits │
+│ ---    ┆ ---      ┆ ---      ┆ ---       │
+│ bool   ┆ f64      ┆ f64      ┆ f64       │
+╞════════╪══════════╪══════════╪═══════════╡
+│ true   ┆ 0.576409 ┆ 0.327738 ┆ 10.621019 │
+│ false  ┆ 0.302919 ┆ 0.211924 ┆ 6.621073  │
+└────────┴──────────┴──────────┴───────────┘
+S2 distractor examples:
+   ('Kamet Center Limited', 'GALI NO 6, MC OFFICE, VIKAS NAGAR, PANIPAT, Haryana', 'India', 0)
+   ('Summit Heritage Motors, Corp', '00992 HAYES ST, BALDWIN HARBOR, NY', 'US', 1)
+   ('Supreme Freight Group Co', '5400 ANVIL DR, CAMILLUS, NY', 'US', 4)
+   ('Arts Council Corp', '8916 WINCHESTER RD, KY, FORKS', 'US', 41)
+   ('Krishna Holdings Enterprises', 'WZ-651, FF KH NO 64/6, 14/1, 64/10/1, 65/1011, RAJ NAGAR, PART-I, PALAM COLONY, NEW DELHI, NULL, Delhi', 'India', 0)
+   ('Desert lnflection (Group)', '217 HARRISON ST, HOPE, IN', 'US', 0)
+   ('Mr Sree Investments Private Limited', 'C-#23-DDA SHED O I P-1 NEW DE-18, AREA HAES, NEW DELHI, Delhi', 'India', 0)
+   ('Royal Harbor Neighborhood Partners', '9 FOREST PARK DRIVE, FARMINGTON, CT', 'US', 0)
+   ('Hurt Quality Grading Group', '4829 JERSEY PIKE, CHATTANOOGA, TN', 'US', 0)
+   ('Indian Public School Overseas Pvt. Ltd.', 'RZ-75/13, G/F, KISHANGARH NEAR DEV SCHOOL, NULL, NEW DELHI, Delhi', 'India', 0)
+   ('RAND BURNR BANKSHARES | www.randburnr.com', '4850 General Hays Road, HAYS, KS', 'US', 0)
+   ('Bailey, Duarte & Blanchard Partners', '162 CARTER AVE, DAYTON, TN', 'US', 0)
+S2 distractors vs same-key S1:
+   D : Orthopedic Interstate Partners Ltd | 807  PARK ST, GRIMES, IA
+   S1: Orthopedic Interstate Partners LLC | 800 Park Street, Grimes, IA
+   D : Gretel Dixon Bay Columbia Ltd | AZ, 997C FORT JACOB RD, CAMP VERDE
+   S1: Gretel Dixon Bay Columbia LLC | 990 Fort Jacob Road, Camp Verde, AZ
+   D : Creative  Empire Inc | 5035 GROVE PARK COURT, CLEVEAND, TN
+   S1: Creative Empire LLC | 5031 Grove Park Court, Cleveland, TN
+   D : JENNILEE LOUGHREY, ESQ CO | 003850 4TH STREET, HUBBARD, OR
+   S1: Jennilee Loughrey, Esq. | 3837 4th Street, Hubbard, OR
+   D : Halligan, Gilchrist & Meier Co | 423 WASHBURN AVENUE, EDEN, NC
+   S1: Halligan, Gilchrist & Meier LLC | 420 Washburn Avenue, Eden, NC
+   D : Shenk Partners Ltd | 43617  MILLAY CT, ASHBURN, VA
+   S1: Shenk Partners | 43615 Millay Court, Loudoun County, VA
+   D : Smart Agricultural | 310  LESLIE STREET, GORDON, AL
+   S1: Smart Agricultural Services | IL, Morton Grove, 7600 Suffield Street
+   D : QUARTZ GROUP | 3009. 78TH ST, RICHFIELD, MN
+   S1: Quartz Group | 1945 Hay Road, Nunda, NY
+S2 row-position corr with S1 (leak check): 0.0009548483307910626
+
+S3: name-key exact hit rate into S1 & mean #S1 sharing key
+shape: (2, 4)
+┌────────┬──────────┬──────────┬───────────┐
+│ is_pos ┆ hit      ┆ hits_ge2 ┆ mean_hits │
+│ ---    ┆ ---      ┆ ---      ┆ ---       │
+│ bool   ┆ f64      ┆ f64      ┆ f64       │
+╞════════╪══════════╪══════════╪═══════════╡
+│ false  ┆ 0.272121 ┆ 0.180518 ┆ 6.970227  │
+│ true   ┆ 0.528145 ┆ 0.293095 ┆ 10.781006 │
+└────────┴──────────┴──────────┴───────────┘
+S3 distractor examples:
+   ('ਸ਼ਿਆਮ ਮੈਨੇਜਮੈਂਟ ਹੋਟਲ ਪ੍ਰਾ. ਲਿ.', 'Door No 8 Back Side Hro Honda Showroom Bibi Wala Road, Bathinda, PB', 'India', 11)
+   ('Arihant Services Pvt Limited', '11A /129 I Main Road Alwarthirunagar Annexe Alwarthirunagar, Chennai, தமிழ்நாடு', 'India', 82)
+   ('Future Swastik LLP Services', '#4509 Elecia Bidg Dosti, Thane, MH', 'India', 0)
+   ('Amir Limited Foods', 'No 630 10Th Main 2Nd Crosscoffee Board Layout, H A Farm Po, Bangalore, KA', 'India', 1)
+   ('Sweta Media Overseas  Private', '#8, Building Yudhishtir-a, Off Link Road, Near Murugeshwarmahadev Mandir N L Complex Da, Hisar East, Mumbai City, Mumbai, MH', 'India', 0)
+   ('Hevea Heights Exports Ltd', '#7/51, Chennai, Kancheepuram, தமிழ்நாடு', 'India', 0)
+   ('Tiro Custom Light Southside LLC', '113 High Street, Ohio, Tiro', 'US', 0)
+   ('Manalang Prime Motors', '130 Benefield Boulevard, Peekskill, New York', 'US', 0)
+   ('Jolly Brothers Limited', 'F No 307, Mumbai, महाराष्ट्र', 'India', 2)
+   ('Agro Elate Buildcon Ventures L.L.P.', '735A, Pune, महाराष्ट्र', 'India', 0)
+   ('ग्रीन पावर होटल', 'G.no 275/3 Pmot No. 46, Niphad Nashik Takali Vinchu R, Niphad, Nashik, MH', 'India', 11)
+   ('Perry  Arroyo Green', 'Maryland, 805 Everist Drive, City Of Aberdeen', 'US', 0)
+S3 distractors vs same-key S1:
+   D : Fargo Baptist Precision Association Ltd | Fargo Ciity, North Dakota, 4463 30th Ave
+   S1: Fargo Baptist Precision Association | 4450 30th Avenue, Fargo, ND
+   D : Best Xrp Clinic  Co | 232 Tower Rd, Prescott, Arizona
+   S1: Best Xrp Clinic | 3230 Tower Road, Prescott, AZ
+   D : FRESH EXPRESS HALL CORP | 24132- Fossil Trl, Spicewood, Texas
+   S1: Fresh Express Hall | 24121 Fossil Trail, Spicewood, TX
+   D : Dowd Patriot Beijing (LLC) | 38333 Deer Street, Aitkin, Minnesota
+   S1: Dowd Patriot Beijing | 5120 Woodway Drive, TX, Houston
+   D : The Reliable Tribeca Co | 0209 County Road 1572, Linden, Texas
+   S1: Reliable Tribeca | 429 Links Drive, North Hills, NY
+   D : Johnson Global Generation Associates Corp | 104 Skipper Road, Abilene, Kansas
+   S1: Johnson Global Generation Associates | 100 Skipper Road, Abilene, KS
+   D : Golden Banco Ltd | 4938 Deramus Avenue, Kansas CIYT, Missouri
+   S1: Golden Banco Inc | 4925 Deramus Avenue, MO, Kansas City
+   D : Heritage Property Studios Co | 98 Navy Cir, Mount Julieet, Tennessee
+   S1: Heritage Property Studios PLLC | 177 Navy Circle, Mt. Juliet, TN
+S3 row-position corr with S1 (leak check): -0.0006552185304752448

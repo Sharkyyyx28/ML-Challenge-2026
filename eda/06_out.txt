@@ -1,0 +1,67 @@
+  .explode())
+
+--- test S1 France samples
+   ('Chateau Sante SARL', '12 Rue du Parc Menier, Nantes, Pays de la Loire')
+   ('Action Theatre SARL', '4 RUE du Relais, Appartement 41 G Batiment M4 Residence Compostelle, Pessac, Nouvelle-Aquitaine')
+   ('Chateau & Fils SARL', '19 Chemin du Buron, Nantes, Pays de la Loire')
+   ('Centre Hospitalier de Julien', '5 Rue Edouard Manet, Mérignac, Nouvelle-Aquitaine')
+   ('Ets Contact SARL', '54 Rue de Croix, Roubaix, Hauts-de-France')
+   ('Tourcoing Fetes EURL', '46 Rue des Ursulines, Tourcoing, Hauts-de-France')
+   ('Club des Bear', '21 Rue de Verdun, Pessac, Nouvelle-Aquitaine')
+   ('Institut Sainte Bureau', 'Bordeaux, Nouvelle-Aquitaine, 13 Rue Crampel')
+   ('ZG Jeunes SARL', '55 Rue de la Montagne, Nantes, Pays de la Loire')
+   ('Amicale du Tumba', '31 Avenue des Epagneuls, Nantes, Pays de la Loire')
+top name tokens: [('sarl', 73486), ('sas', 52278), ('club', 22673), ('france', 20793), ('de', 17859), ('eurl', 16980), ('amicale', 14389), ('sa', 12767), ('ecole', 10995), ('maison', 10839), ('du', 10728), ('sasu', 10721), ('centre', 10519), ('comite', 9957), ('union', 8630), ('sci', 8360), ('sportive', 8234), ('des', 7835), ('amis', 6915), ('primaire', 6716), ('pharmacie', 5962), ('cie', 5680), ('saint', 5611), ('la', 5379)]
+
+--- test S2 France samples
+   ('ENSEIGNEMENT et FS DÉVELOPPEMENT SARL', 'N° 9 R. DU CROQUET, LILLE, Nord')
+   ('Sapeurs Gestion (France) SASU', '85 R DE LA CONTRIE, Loire-Atlantique, NANTES')
+   ('Sauvage Freres Amicale SARL', '# 109 Q. VIRGINIE HÉRIOT, BORDEAUX')
+   ('DUNKERQUE SPORTIVE (S.A.S)', 'Hauts-de-France, 356 R DES EGLANTINES, DUNKERQUE')
+   ('Lège-Cap-Ferret Grhuement', None)
+   ('Association de Etduaits', 'RUE DES HANNETONS, LILLE')
+   ('Vents Lycee', '60BIS RUE DES HAUTS PAVÉS, NANTES, Pays de la Loire')
+   ('Chasse Jèunes Groupe SARL', '24 ALLÉE MIRABEAU, SAINT-HERBLAIN')
+   ('ENTRAIDE SAS  UNION', '5 RUE VITAL CARLES, BORDEAUX')
+   ('(SARL) INNO IMMO', "9 BIS PLACE DE L'ÎLE JEANTY, Dunkerque")
+top name tokens: [('sarl', 140707), ('sas', 98854), ('france', 67614), ('s', 49741), ('club', 48840), ('eurl', 41520), ('de', 40999), ('sa', 34398), ('amicale', 32019), ('sasu', 31209), ('a', 28381), ('sci', 27373), ('groupe', 26586), ('maison', 24965), ('du', 24829), ('com', 24613), ('ecole', 23387), ('centre', 22500), ('développement', 22036), ('comite', 21548), ('fils', 20496), ('union', 20100), ('des', 18206), ('sportive', 17575)]
+
+--- test S3 France samples
+   ('Fédération du Malle Distribution', 'Hauts-de-France, Tourcoing, No 16 Rue De Carvin')
+   ('Comité de Armoric France SAS', '44 Rue Mignard, Calais')
+   ('IPF Dànse SARL', '8 Pl. Simon Vollant, Lille')
+   ('Sapeurs Fetes International SARL', '16 Rue Marange Sylvange, Loire-Atlantique, Nantes')
+   ('Reveil Centre Sàrl', 'N° 46 Avenue About, Dunkerque')
+   ('Comité de Cultuelle SASU', 'N° 6 Impasse Emile Verhaeren, Mérignac, Nouvelle-Aquitaine')
+   ('Sainte Club Julien', '12 R De Larche Seche, Nantes, Pays de la Loire')
+   ('Amicale du Ferme', '12 Rue De La Caillette, Nantes, Pays de la Loire')
+   ('PBV Loisirs Développement SA', '22 Rue Des Canonniers, Lille')
+   ('Petanque Ecole SNC', 'No. 51 R. Colbert, Lille')
+top name tokens: [('sarl', 144483), ('sas', 101750), ('france', 68936), ('club', 50682), ('s', 49814), ('eurl', 42295), ('de', 41982), ('sa', 35108), ('a', 34601), ('amicale', 33205), ('sasu', 31684), ('sci', 27897), ('groupe', 26658), ('maison', 25569), ('du', 25175), ('com', 25152), ('ecole', 24422), ('centre', 23175), ('développement', 22147), ('comite', 21876), ('fils', 20992), ('union', 20517), ('des', 18343), ('sportive', 17852)]
+
+blocking feasibility over 207577 positive pairs: {'name_tok': 0.8485, 'addr_num': 0.7994, 'addr_word': 0.8512, 'any_': 0.9987, 'none_': 0.0013}
+positives sharing NO cheap key:
+   S1: Domeniga Ingraham Harbor Center | 212 Gloria Street, Unit C, Thibodaux, LA
+   S*: d0menigaingrahamharbor.com | 12 GLORIA ST, TIBODAUX, LA
+   S1: Classic Ventures Private Limited | N 149, Ground Floor Greater Kailash I, New Delhi, Delhi
+   S*: क्लासिक वेंचर्स प्राइवेट लिमिटेड | NEW DELHI, N 14, Delhi, NEW DELHI
+   S1: Real Lotus Systems | 13-D, Main Road, Kodavasal, Thiruvarur, Tamil Nadu
+   S*: ரியல் லோட்டஸ் சிஸ்டம்ஸ் | 013-D, KODAVASAL, தமிழ்நாடு
+   S1: I+ Petroleum | 204 4th Street, Unit Apt 24, Foreman, AR
+   S*: I+  PEIREUM | None
+   S1: Dynamic Energy LLP | F-5B, First Floor, Alankar Plaza, Central Spice, Sector 2, Jaipur, Rajasthan
+   S*: डायनामिक एनर्जी एलएलपी | F-05B, JAIPUR, राजस्थान
+   S1: Bharat Projects Pvt Ltd | Satara, Adwait Aprtment Visawa Park, Godoli, Satara, Maharashtra, F.F-4, Satara
+   S*: भारत प्रोजेक्ट्स प्रा. लि. | F.F-004, SATARA, महाराष्ट्र
+   S1: Izabel's Vanguard Services | 2070 Belmont Road, Unit 505, Washington, DC
+   S*: ízabelsvanguardservices.com | BELMONT RD, WASHINGTONT OWNSHIP, DC
+   S1: N 6 O Grill L.L.C. | 267 Lime Kiln Drive, Rockingham County, VA
+   S*: N 6 O Gl L.L.C. #32462 | None
+   S1: Noex LLC | 1900 Jerrys Run Road, Belleville, WV
+   S*: Nrse Nrse LLC | 7900 JERRYS RUN RD, BELLEVILE CDP, WV
+   S1: Universal Software | T-192, Jain Colony Part-1, Uttam Nagar, New Delhi, West Delhi, Delhi
+   S*: यूनिवर्सल सॉफ्टवेयर | T-00192, NEW DELHI, Delhi
+   S1: LUM Esports Inc. | 3365 Higley Road, Rocky River, OH
+   S*: lesports.com | HIGLEY RD, ROCK YRIVER, OH
+   S1: Nova | 6117 Heathstone Lane, Unit A, Charlotte, NC
+   S*: Nóva | None

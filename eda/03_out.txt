@@ -1,0 +1,211 @@
+sample positive pairs: 207577
+country agree: 1.0
+shape: (0, 8)
+┌──────────────┬─────┬─────────────┬─────────────┬─────────┬─────────────┬─────────────┬───────────┐
+│ source1_enti ┆ ids ┆ business_na ┆ business_ad ┆ country ┆ business_na ┆ business_ad ┆ country_o │
+│ ty_id        ┆ --- ┆ me          ┆ dress       ┆ ---     ┆ me_o        ┆ dress_o     ┆ ---       │
+│ ---          ┆ str ┆ ---         ┆ ---         ┆ str     ┆ ---         ┆ ---         ┆ str       │
+│ str          ┆     ┆ str         ┆ str         ┆         ┆ str         ┆ str         ┆           │
+╞══════════════╪═════╪═════════════╪═════════════╪═════════╪═════════════╪═════════════╪═══════════╡
+└──────────────┴─────┴─────────────┴─────────────┴─────────┴─────────────┴─────────────┴───────────┘
+
+name token_set_ratio quantiles by src/country:
+shape: (4, 9)
+┌─────┬─────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬────────────┐
+│ src ┆ country ┆ n_q5      ┆ n_q25     ┆ … ┆ a_q5      ┆ a_q25     ┆ a_q50     ┆ name_exact │
+│ --- ┆ ---     ┆ ---       ┆ ---       ┆   ┆ ---       ┆ ---       ┆ ---       ┆ ---        │
+│ str ┆ str     ┆ f64       ┆ f64       ┆   ┆ f64       ┆ f64       ┆ f64       ┆ f64        │
+╞═════╪═════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪════════════╡
+│ S3  ┆ US      ┆ 53.333333 ┆ 89.230769 ┆ … ┆ 53.968254 ┆ 78.873239 ┆ 86.153846 ┆ 0.13007    │
+│ S2  ┆ US      ┆ 54.545455 ┆ 88.888889 ┆ … ┆ 52.941176 ┆ 85.714286 ┆ 93.103448 ┆ 0.139027   │
+│ S3  ┆ India   ┆ 9.375     ┆ 75.0      ┆ … ┆ 43.478261 ┆ 82.539683 ┆ 91.428571 ┆ 0.067851   │
+│ S2  ┆ India   ┆ 8.695652  ┆ 41.860465 ┆ … ┆ 61.818182 ┆ 89.0625   ┆ 94.827586 ┆ 0.062351   │
+└─────┴─────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴────────────┘
+
+frac name_tsr<50: 0.11164531715941554  addr_tsr<50: 0.04886379512181022  both<50: 0.0014548818028972382
+
+--- random positives (207577)
+[US] n=100 a=89
+   S1: Mckinley Preparatory Academy LLC | 120 Humboldt Avenue, Unit 22, Boston, MA
+   S*: Mckinley Preparatory Academy | 120 Humboldt Avenue, # 22, Boston, Massachusetts
+[US] n=65 a=81
+   S1: FV Precision LLC | 1720 25th Avenue, Eugene, OR
+   S*: FV LLC Services | 1720 25rd Ave, Eugene, Oregon
+[India] n=89 a=88
+   S1: Arvind (India) Workforce Private Limited | Delhi, 74, Near P.D. Gupta Mediscan Daryaganj, Ground Floor
+   S*: ARVIND WORKFORCE PRIVATE PRIVATE LIMITED SERVICES | 74, GROUND FLOOR, NEAR P.D. GUPTA MEDISCAN DARYAGANJ, दिल्ली
+[India] n=100 a=77
+   S1: SOC Maintenance Private Limited | Bl-37/116, Sector 116, Noida, Noida, Gautam Buddha Nagar, Uttar Pradesh
+   S*: Soc Maintenance Private Limited | Bl-c-37/116, Noida, Gautam Buddha Nagar, UP
+[India] n=83 a=84
+   S1: Apt Cast Pvt Ltd | #3Rt, Ameerpet Colony, Near Kanakadurga Temple, Hyderabad, Telangana
+   S*: M/s Apt Cást Pvt Ltd | తెలంగాణ, 3RT , AMEERPET COLONY, NEAR KANAKADURGA TEMPLE, HYDERABAD
+[India] n=90 a=97
+   S1: United Enterprises Pvt Ltd | 20 Kalajhala Post Singhi Rampur Kalajhala, Farrukhabad, Uttar Pradesh
+   S*: United Etrposes Pvt Ltd | 20 Kalajhala Post Singhi Rampur Kalajhala, Farrukhabad, UP
+[US] n=83 a=77
+   S1: Sullivan Arts LLC | Shelton, WA, 60 Jarrett Drive
+   S*: Sullivan LLC Services | 60 Jarett Dr, Shelton, Washington
+[India] n=100 a=93
+   S1: Ashita Farmhouses Ltd | C/O Dilip Ambadas Jagdale, Anmol Niwas, Shahupuri Colony, Rajiv Gandhi Chouwk, Latur, Maharashtra
+   S*: Ashita Ltd Farmhouses | H.no 789 C/o Dilip Ambadas Jagdale, Anmol Niwas, Shahupuri Colony, Rajiv Gandhi Chouwk, Latur, MH
+[US] n=100 a=90
+   S1: Halcex Critical | 652 Monte Carlo Drive, Nashville, TN
+   S*: Halcex Critical Corporation | 652 1/2 MONTE CARLO DR, NASHVILLE, TN
+[US] n=100 a=100
+   S1: Cherianne Abt Development Inc | 4238 Country Club Road, Winston-salem, NC
+   S*: Cherianne Abt Development  Inc (ID: 55428) | 4238 COUNTRY CLUB ROAD, WINSTON-SALEM, NC
+[US] n=61 a=89
+   S1: Granger Allocation | 10249 Patricia Church Drive, Granger, IN
+   S*: gallocation.com | 10249. Patricia Church Dr, Granger, Indiana
+[US] n=100 a=83
+   S1: Steck Core LLC | 9785 Keuka Hill Road, Wayne, NY
+   S*: STECK LLC CORE | 9785 KEUKA HILL ROAD, NY, DUNDEE
+[US] n=100 a=96
+   S1: Flory Index | 1616 Tremont Avenue, Norristown Borough, PA
+   S*: Flory  Index | 1616 TREMONT AVE, NORRISTOWN BOROUGH, PA
+[US] n=100 a=92
+   S1: Highland Star Dynamics LLC | MD, 6915 Heidelburg Road, Lanham
+   S*: Highland Star Dynamics | MD, LANHAM, 6915- HEIDELBURG RD
+[US] n=100 a=100
+   S1: @ Cure 8 All | 126 Placid Place, Irondequoit, NY
+   S*: @ Cure 8 All Corp | PLACID PLACE, IRONDEQUOIT, NY
+[India] n=10 a=100
+   S1: All Projects Private Limited | No.16 Kurinjipadi Po Pattai Street, Cuddalore, Tamil Nadu
+   S*: ஆல் புராஜெக்ட்ஸ் பிரைவேட் லிமிடெட் | NO.16 KURINJIPADI PO PATTAI STREET, CUDDALORE, Tamil Nadu
+[US] n=100 a=89
+   S1: Garcia Interests LLC | 1737 Sheffield Place, Fort Worth, TX
+   S*: Garcia Interests Llc | 1738 Sheffield Pl, Fort Worth, Texas
+[India] n=11 a=82
+   S1: Jai Green Management Private Limited | Aalay Apartment 'D' Wing, Mumbai, Mumbai City, Maharashtra, 003, Gogate Wadi Road, Churi Wadi, Goregaon (E)
+   S*: जय ग्रीन मैनेजमेंट प्राइवेट लिमिटेड | AALAY APARTMENT 'D' WIMG, MUMBAI, MUMBAI CITY, महाराष्ट्र
+[US] n=95 a=95
+   S1: Thompson Select Spa | 48-09 39 Avenue, Sunnyside, NY
+   S*: Thompson Thompson Sélect Spa | 48-09 39 Avenue, Sunnyside, New York
+[India] n=82 a=72
+   S1: Bobbili Institute | Cp-15, Sector-C, Aliganj, Lucknow, Uttar Pradesh
+   S*: Bobbili (Isnitte) | Cp-0015, Lucknow, उत्तर प्रदेश, Sector-c, Aliganj
+[US] n=100 a=100
+   S1: Flood Gulf Public, Inc | 23 Road 5251, Bloomfield, NM
+   S*: Flood  Gulf Public, | 23 ROAD 5251, BLOOMFIELD, NM
+[India] n=100 a=97
+   S1: Bharat & Brothers Private Limited | B1, Navaratna Apartments Bhagyadhara Lane, Cochin, Kerala
+   S*: Bharat & Brothers | B1, Cochin, Navaratna Apartments Bhagyadhara Lane, KL
+[US] n=100 a=91
+   S1: Apex Packaging Holdings | 1300 Dewey Street, Unit 408, Jasper, IN
+   S*: APEX HOLDINGS PACKAGING | 1300 DEWEY ST, JASPER, IN
+[US] n=95 a=95
+   S1: Heritage Health Associates, Inc | 4571 Brooklyn Court, Columbus, OH
+   S*: Heritage Health Associets, Inc | 4571 BROOKLYN CT, COLUMBUS, OH
+[India] n=9 a=97
+   S1: Alpha Projects Private Limited | Unit No. B1, 203A, Second Floor, Boomerang Bldg, Chandivali Farm Road, Powai, Mumbai, Mumbai City, Maharashtra
+   S*: अल्फा प्रोजेक्ट्स प्राइवेट लिमिटेड | UNIT NO. B1, 203A, SECOND FLOOR, BOOMERANG BLDG, CHANDIVALI FARM ROAD, POWAI, THANE, MUMBAI CITY, Maharashtra
+
+--- low NAME sim positives (23175)
+[India] n=10 a=90
+   S1: Unique Services Private Limited | Flat No. 302, Plot No. 135, Sec 5 Ghansoli, Mumbai, Mumbai City, Maharashtra
+   S*: यूनिक सर्विसेज प्राइवेट लिमिटेड | Flat No. 302, Plot No. 135, Sec 5 Ghansoli, Mumbai, Thane, MH
+[India] n=8 a=91
+   S1: Al Projects | 115 Block A Wazirpur Group Ind Area, Delhi, North West, Delhi
+   S*: अल प्रोजेक्ट्स | H.no #115 Block A Wazirpur Group Ind Area, North West Delhi, North West, DL
+[India] n=9 a=100
+   S1: Anand Engineering Private Limited | Lig 472, 2Nd Floor, Road No. 3, Near Shivalayam Temple, Kphb, Hyderabad, Telangana
+   S*: ఆనంద్ ఇంజనీరింగ్ ప్రైవేట్ లిమిటెడ్ | LIG 472, 2ND FLOOR, ROAD NO. 3, NEAR SHIVALAYAM TEMPLE, KPHB, HYDERABAD, Telangana
+[India] n=42 a=94
+   S1: Skp Security Private Limited | P3, #119/2, Bilekahalli Village, Begur Hobli, B G Road, Bangalore, Karnataka
+   S*: Skpsecurity.Com | P3, #119/2, Bilekahalli Village, Begur Hobli, B G Road, Bangalore, ಕರ್ನಾಟಕ
+[US] n=44 a=67
+   S1: Varnell Preferred Manufacturing Inc | 14249 Shirley Road, Orange County, VA
+   S*: varnellpreferredmanufacturing.com | 14249 SHIRLEY RD, UNIONVILLE, VA
+[India] n=42 a=58
+   S1: Unify Trading Ltd | W-3, Sushilnagar, Sohna, Gurgaon, Haryana
+   S*: Unifytrading.Com | #797 W-3, Sohna, HR, Raipur
+[India] n=8 a=91
+   S1: Classic Technologies Private Limited | B-2/80 2Nd Floor, Paschim Vihar, Delhi
+   S*: क्लासिक टेक्नोलॉजीज प्राइवेट लिमिटेड | #963 B-2/80 2Nd Floor, Paschim Vihar, Delhi, DL
+[India] n=8 a=99
+   S1: Dynamic Consulting Private Limited | P No 33 34 35, F No 502, Aurobindo Colony, Miyapur, Tirumalagiri, Hyderabad, Telangana
+   S*: డైనమిక్ కన్సల్టింగ్ ప్రైవేట్ లిమిటెడ్ | P NO 33- 34 35, F NO 502, AUROBINDO COLONY, MIYAPUR, TIRUMALAGIRI, HYDERABAD, Telangana
+[India] n=9 a=94
+   S1: First Consultants Private Limited | Hr-3 Flat No 501, Punyapravah, Nagalapark, Karvir, Kolhapur, Maharashtra
+   S*: फर्स्ट कंसल्टेंट्स प्राइवेट लिमिटेड | HR-3 FLAT NO 501, NULL, KARVIR, KOLHAPUR, Maharashtra
+[India] n=45 a=95
+   S1: Creative Consultancy Private Limited | 409, 4Th Floor, D-Mall, Neta Ji Subhash Place, Pitampura Delhi, North West, Delhi
+   S*: CREATIVECONSULTANCYCOM | 409, 4TH FLOOR, D-MALL, NETA JI SUBHASH PLACE, PITAMPURA DELHI, दिल्ली
+[India] n=9 a=84
+   S1: Creative Silver Infotech LLP | Tamil Nadu, Chennai, No 13 First Floor, Chennai, Ram Colony, West Mambalam
+   S*: கிரியேட்டிவ் சில்வர் இன்ஃபோடெக் எல்எல்பி | No 13 First Floor, Chennai, தமிழ்நாடு
+[India] n=40 a=80
+   S1: First Blue Solutions Pvt Ltd | 4Th Floor, Gujarat, Jamnagar, Kailash Heights Commercial Comp, Raj Rajeshwari
+   S*: ફર્સ્ટ બ્લૂ સોલ્યુશન્સ Pvt Ltd | FLOOR, JAMNAGAR, Gujarat
+[India] n=9 a=89
+   S1: Jain Hospitality Private Limited | 305/D, K.P.Road, Parvathipuram, Nagercoil, Kanyakumari District, Kanyakumari, Tamil Nadu
+   S*: ஜைன் ஹாஸ்பிடாலிட்டி பிரைவேட் லிமிடெட் | 307/D, K.P.ROAD, PARVATHIPURAM, NAGERCOIL, KANYAKUMARI DISTRICT, KANYAKUMARI, தமிழ்நாடு
+[India] n=8 a=71
+   S1: Swastik Creative Technology | 0- Tobba Mkt, Patiala, Patran, Punjab, Samana
+   S*: ਸਵਾਸਤਿਕ ਕ੍ਰਿਏਟਿਵ ਟੈਕਨਾਲੋਜੀ | #0- TOBBA MKT, SAMANA, PATIALA, ਪੰਜਾਬ
+[US] n=37 a=91
+   S1: Star Next Inc | 34447 Yucaipa Boulevard, Yucaipa, CA, Unit UNIT 33
+   S*: Vantagenexmira | CA, YUCAIPA, 34447 YUCAIPA BLVD
+[US] n=44 a=89
+   S1: Oncology Center of Fuquay Varina Company | NC, 408 Knolls View Drive, Fuquay Varina
+   S*: oncologycenterfuquay.com | 408 KNOLLS VIEW DR, NULL, FUQUAY VARINA, NC
+[India] n=10 a=100
+   S1: Tirupati Hari Industries Private Limited | 7/177 A Swaroop Nagar, Kanpur, Uttar Pradesh
+   S*: तिरुपति हरि इंडस्ट्रीज प्राइवेट लिमिटेड | DOOR NO 7/177 A SWAROOP NAGAR, KANPUR, Uttar Pradesh
+[India] n=9 a=91
+   S1: Best Products Private Limited | 2A, 2Nd Floor, Whitewates, Timberlake Colony, Raidurg, Seri Lingampally, K.V.Rangareddy, Telangana
+   S*: బెస్ట్ ప్రొడక్ట్స్ ప్రైవేట్ లిమిటెడ్ | 2A, 2ND FLOOR, WHITEWATES, TIMBERLAKE COLONY, RAIDURG, SERI LINGAMPALLY, Andhra Pradesh
+[India] n=10 a=90
+   S1: Prime Foods Private Limited | New No 13, Old No 6, Vinayagam Avenue, Tamil Nadu, Chennai, Chennai City Corporation
+   S*: பிரைம் ஃபுட்ஸ் பிரைவேட் லிமிடெட் | TN, New No 13, Chennai
+[India] n=15 a=98
+   S1: Great Infra Pvt Ltd | Gno 1036, Bld C-12, Shiva, Resi., Newalewasti, Haveli, Pune, Maharashtra
+   S*: ग्रेट इंफ्रा प्रा. लि. | Gno 1036, Bld C-12, Shiva, Resi., Newalewasti, Haveli, Pune, MH
+
+--- low ADDRESS sim positives (9359)
+[India] n=100 a=25
+   S1: Apex Alpha Food Private Limited | 30/5, Ambedkar Road, Ghaziabad, Uttar Pradesh
+   S*: Apex  Alpha Food Private | 30/5-., UP
+[US] n=100 a=0
+   S1: Cassandra's Fisheries | 240 Belmont Street, Unit 1-515, Worcester, MA
+   S*: Cassandra's Fisheries | None
+[US] n=90 a=0
+   S1: Physical Therapy Custom Care Associates LLC | Saint Louis, MO, 7803 Tanager Court, Fl 0
+   S*: PHYSICAL THERAPY CUSTOM CARE LLC CENTER | None
+[US] n=84 a=0
+   S1: Chiropractic Vanguard Clinic, Inc | 1359 Grand Avenue, Unit APARTMENT 202, Newport, KY
+   S*: Chiropractic Vanguard Ceisnoc, (Inc) | None
+[India] n=96 a=0
+   S1: JVV Center Private Limited | Delhi, North Delhi, 7 Raj Narain Road Civil Lines, Delhi
+   S*: JVV Private Limited (Center) | None
+[India] n=100 a=26
+   S1: Krishna Consultancy Private Limited | B7, Golf View Apartments, Saket, New Delhi, Delhi
+   S*: Krishna Consultancy Private | Block D-##650 B7, DL
+[India] n=84 a=0
+   S1: Zirain Services LLP | Plot No. 7, Ground Floor, Crossing Republic, Ghaziabad, Uttar Pradesh
+   S*: Zirain  Srnvisis LLP | None
+[India] n=86 a=0
+   S1: Kaveri Services Pvt Ltd | 1, Ganesh Chandra Avenue, 6Th Floor, Room No-601, Kolkata, Kolkata, Howrah, West Bengal
+   S*: Kaveri Sérvices Pvt | None
+[US] n=100 a=0
+   S1: Steele Blue Rmg | 715 Lytle Avenue, Elsmere, KY
+   S*: Steele Blue Rmg | None
+[US] n=96 a=0
+   S1: Laborers Local Union 658 | WI, City Of Two Rivers, 3307 41st Street
+   S*: Laborers Local Union (658) | None
+[US] n=93 a=0
+   S1: Vi A. Lyman, DDS, PC | 693 Stringham Road, Higginson, AR
+   S*: Vi A Lyman, DDS, | None
+[US] n=73 a=0
+   S1: Anderson Holdings | 198 Bridgewater Lane, Elsinore, UT
+   S*: Anderson (Inc) | None
+[US] n=100 a=0
+   S1: Sinclair Trust | 15256 22nd Street, Phoenix, AZ
+   S*: Sinclair Trust | None
+[India] n=100 a=0
+   S1: RBC Bake Corporation | C/O Dharambir Vill Dhani, Jorawat, Nangal Jamalpur, Gothra, Rewari, Haryana
+   S*: RBC BAKE CORPORATION | None
+[US] n=100 a=0
+   S1: Maddox & Edwards Pennantpark LLC | 2300 Richmond Drive, Albuquerque, NM
+   S*: MADDOX & EDWARDS PENNANTPARK LLC | None

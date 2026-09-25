@@ -1,0 +1,47 @@
+same-namekey & street-overlap pairs: 218154  positives: 187975
+shape: (2, 9)
+┌───────┬──────────────┬──────────┬─────────────┬───┬──────────┬──────────┬──────────┬─────────────┐
+│ label ┆ suf_conflict ┆ suf_same ┆ suf_one_mis ┆ … ┆ num_le2  ┆ num_3_20 ┆ num_gt20 ┆ num_missing │
+│ ---   ┆ ---          ┆ ---      ┆ sing        ┆   ┆ ---      ┆ ---      ┆ ---      ┆ ---         │
+│ bool  ┆ f64          ┆ f64      ┆ ---         ┆   ┆ f64      ┆ f64      ┆ f64      ┆ f64         │
+│       ┆              ┆          ┆ f64         ┆   ┆          ┆          ┆          ┆             │
+╞═══════╪══════════════╪══════════╪═════════════╪═══╪══════════╪══════════╪══════════╪═════════════╡
+│ false ┆ 0.532357     ┆ 0.028894 ┆ 0.436562    ┆ … ┆ 0.183933 ┆ 0.636111 ┆ 0.169053 ┆ 0.000166    │
+│ true  ┆ 0.006719     ┆ 0.396659 ┆ 0.341944    ┆ … ┆ 0.011478 ┆ 0.008214 ┆ 0.10564  ┆ 0.087405    │
+└───────┴──────────────┴──────────┴─────────────┴───┴──────────┴──────────┴──────────┴─────────────┘
+
+P(match | suffix-conflict, num delta bucket):
+shape: (10, 4)
+┌──────────────┬──────┬────────┬──────────┐
+│ suf_conflict ┆ b    ┆ n      ┆ p_match  │
+│ ---          ┆ ---  ┆ ---    ┆ ---      │
+│ bool         ┆ str  ┆ u32    ┆ f64      │
+╞══════════════╪══════╪════════╪══════════╡
+│ false        ┆ 0    ┆ 149180 ┆ 0.999001 │
+│ false        ┆ 1-2  ┆ 4546   ┆ 0.430928 │
+│ false        ┆ 3-20 ┆ 10404  ┆ 0.134371 │
+│ false        ┆ >20  ┆ 20370  ┆ 0.8838   │
+│ false        ┆ na   ┆ 16325  ┆ 0.999755 │
+│ true         ┆ 0    ┆ 1194   ┆ 0.849246 │
+│ true         ┆ 1-2  ┆ 2973   ┆ 0.003364 │
+│ true         ┆ 3-20 ┆ 10199  ┆ 0.001079 │
+│ true         ┆ >20  ┆ 2853   ┆ 0.04171  │
+│ true         ┆ na   ┆ 110    ┆ 0.990909 │
+└──────────────┴──────┴────────┴──────────┘
+
+examples: positives with suffix conflict
+   Keystone Blue Technical Inc | 556 Cedar Ln, Batesville, Indiana  <->  Keystone Blue Technical PC | IN, 556 Cedar Lane, Batesville
+   Piedmont Interests Inc | 69 Owlsboro Rd, N/A, Mount Chase, Maine  <->  Piedmont Interests LP | 69 Owlsboro Road, Mount Chase, ME
+   LEGACY PAYROLL ASSOCIATES LLC | 970 KITTRELL DRIVE, CARMEL, IN  <->  Legacy Payroll Associates PC | 9709 Kittrell Drive, Carmel, IN
+   LLC Family All Physicians | Somerville, Tennessee, 220 Rose Rd  <->  Family All Physicians PC | 220 Rose Road, Somerville, TN
+   First Energy Ventures Inc | 4111 ERIE STREET, HOUSTON, TX  <->  First Energy Ventures PC | 4111 Erie Street, Houston, TX
+   Pediatric Elite Care Associates Inc | 002007 BEECHWOOD CT, LA PORTE, IN  <->  Pediatric Elite Care Associates PC | La Porte, 2007 Beechwood Court, IN
+examples: negatives with same number & no suffix conflict
+   Venet Group-Seymour Inc | 475 6 O_brien Street, Seymour, Indiana  <->  Venet Group-Seymour | 475 4 O_brien Street, Seymour, IN
+   Jackson Grill Co | N72w13539 Lund Lane, Menomonee Falls, Wisconsin  <->  Jackson Grill | N72W13536 Lund Lane, Village Of Menomonee Falls, WI
+   Womens Health Gulf Group LLC | 145-82 181 ST, SPRINGFIELD GARDENS, NY  <->  Womens Health Gulf Group | 145-81 181 Street, Springfield Gardens, NY
+   Smith Spacsphere Ltd | 252 -617d Town Center Dr, Virignia Beach CITY, Virginia  <->  Smith Spacsphere | 252 -604 Town Center Drive, Virginia Beach City, VA
+   Schneider, Burch and Koontz Excavation Ltd | 001709 -228 CHASE POINTE CIR, VIRGINIA BEACH CITY, VA  <->  Schneider, Burch and Koontz Excavation | 1709 -215 Chase Pointe Circle, Virginia Beach City, VA
+   Coastal Pediatrics LLC | 2501 270 Wabash Avenue, Springfield, Illinois  <->  Coastal Pediatrics | 2501 257 Wabash Avenue, Springfield, IL
+   Hosein Partners Co | 2S 673 Kenilworth Rd, Glen Ellyn, Illinois  <->  Hosein Partners | 2S 668 Kenilworth Road, Glen Ellyn, IL
+   Premier Freight  Works Ltd | 412 -308 Eden Roc Cir, Virginia Beach City, Virginia  <->  Premier Freight Works | 412 -306 Eden Roc Circle, Virginia Beach City, VA

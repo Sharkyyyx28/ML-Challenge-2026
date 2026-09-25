@@ -1,0 +1,255 @@
+C:\Users\yashv\Desktop\ML-challenge-2026\eda\01_file_stats.py:9: DeprecationWarning: the argument `missing_utf8_is_empty_string` for `read_csv` is deprecated. It was renamed to `empty_string_is_null` in version 1.43.0.
+  return pl.read_csv(path, separator="\t", quote_char=None, infer_schema=False,
+
+===== train source1: 2,206,821 rows, cols=['entity_id', 'business_name', 'business_address', 'country']
+dup entity_id: 0
+shape: (2, 3)
+┌─────────┬─────────┬──────┐
+│ country ┆ count   ┆ frac │
+│ ---     ┆ ---     ┆ ---  │
+│ str     ┆ u32     ┆ f64  │
+╞═════════╪═════════╪══════╡
+│ US      ┆ 1323633 ┆ 0.6  │
+│ India   ┆ 883188  ┆ 0.4  │
+└─────────┴─────────┴──────┘
+business_name {'empty': 0.0, 'null_str': 6.751793643435512e-05, 'len_med': 24.0, 'len_p95': 37.0, 'upper': 0.0}
+shape: (2, 3)
+┌─────────┬────────┬─────────┐
+│ country ┆ script ┆ len     │
+│ ---     ┆ ---    ┆ ---     │
+│ str     ┆ str    ┆ u32     │
+╞═════════╪════════╪═════════╡
+│ India   ┆ ascii  ┆ 883188  │
+│ US      ┆ ascii  ┆ 1323633 │
+└─────────┴────────┴─────────┘
+business_address {'empty': 0.0, 'null_str': 0.000514767622747835, 'len_med': 41.0, 'len_p95': 103.0, 'upper': 1.8125620519289964e-06}
+shape: (3, 3)
+┌─────────┬─────────────────┬─────────┐
+│ country ┆ script          ┆ len     │
+│ ---     ┆ ---             ┆ ---     │
+│ str     ┆ str             ┆ u32     │
+╞═════════╪═════════════════╪═════════╡
+│ India   ┆ ascii           ┆ 882634  │
+│ India   ┆ latin_ext/other ┆ 554     │
+│ US      ┆ ascii           ┆ 1323633 │
+└─────────┴─────────────────┴─────────┘
+dup (name,addr) rows: 0
+dup name rows (lower): 668017
+
+===== train source2: 5,034,616 rows, cols=['entity_id', 'business_name', 'business_address', 'country']
+dup entity_id: 0
+shape: (2, 3)
+┌─────────┬─────────┬───────┐
+│ country ┆ count   ┆ frac  │
+│ ---     ┆ ---     ┆ ---   │
+│ str     ┆ u32     ┆ f64   │
+╞═════════╪═════════╪═══════╡
+│ US      ┆ 3016817 ┆ 0.599 │
+│ India   ┆ 2017799 ┆ 0.401 │
+└─────────┴─────────┴───────┘
+business_name {'empty': 0.0, 'null_str': 7.269670616388618e-05, 'len_med': 25.0, 'len_p95': 40.0, 'upper': 0.279572265292924}
+shape: (6, 3)
+┌─────────┬─────────────────┬─────────┐
+│ country ┆ script          ┆ len     │
+│ ---     ┆ ---             ┆ ---     │
+│ str     ┆ str             ┆ u32     │
+╞═════════╪═════════════════╪═════════╡
+│ India   ┆ ascii           ┆ 1455362 │
+│ India   ┆ devanagari      ┆ 269424  │
+│ India   ┆ other_indic     ┆ 204921  │
+│ India   ┆ latin_ext/other ┆ 88092   │
+│ US      ┆ ascii           ┆ 2814646 │
+│ US      ┆ latin_ext/other ┆ 202171  │
+└─────────┴─────────────────┴─────────┘
+business_address {'empty': 0.03356105013768677, 'null_str': 0.03529504534208766, 'len_med': 37.0, 'len_p95': 96.0, 'upper': 0.6673936999365989}
+shape: (6, 3)
+┌─────────┬─────────────────┬─────────┐
+│ country ┆ script          ┆ len     │
+│ ---     ┆ ---             ┆ ---     │
+│ str     ┆ str             ┆ u32     │
+╞═════════╪═════════════════╪═════════╡
+│ India   ┆ ascii           ┆ 1539403 │
+│ India   ┆ devanagari      ┆ 277523  │
+│ India   ┆ other_indic     ┆ 199998  │
+│ India   ┆ latin_ext/other ┆ 875     │
+│ US      ┆ ascii           ┆ 3016760 │
+│ US      ┆ latin_ext/other ┆ 57      │
+└─────────┴─────────────────┴─────────┘
+dup (name,addr) rows: 25891
+dup name rows (lower): 747146
+
+===== train source3: 5,285,603 rows, cols=['entity_id', 'business_name', 'business_address', 'country']
+dup entity_id: 0
+shape: (2, 3)
+┌─────────┬─────────┬──────┐
+│ country ┆ count   ┆ frac │
+│ ---     ┆ ---     ┆ ---  │
+│ str     ┆ u32     ┆ f64  │
+╞═════════╪═════════╪══════╡
+│ US      ┆ 3170056 ┆ 0.6  │
+│ India   ┆ 2115547 ┆ 0.4  │
+└─────────┴─────────┴──────┘
+business_name {'empty': 0.0, 'null_str': 7.000147381481357e-05, 'len_med': 25.0, 'len_p95': 42.0, 'upper': 0.07572872953190014}
+shape: (6, 3)
+┌─────────┬─────────────────┬─────────┐
+│ country ┆ script          ┆ len     │
+│ ---     ┆ ---             ┆ ---     │
+│ str     ┆ str             ┆ u32     │
+╞═════════╪═════════════════╪═════════╡
+│ India   ┆ ascii           ┆ 1724375 │
+│ India   ┆ devanagari      ┆ 158003  │
+│ India   ┆ other_indic     ┆ 120521  │
+│ India   ┆ latin_ext/other ┆ 112648  │
+│ US      ┆ ascii           ┆ 2954491 │
+│ US      ┆ latin_ext/other ┆ 215565  │
+└─────────┴─────────────────┴─────────┘
+business_address {'empty': 0.033282106128666875, 'null_str': 0.03337178369241882, 'len_med': 42.0, 'len_p95': 91.0, 'upper': 0.03345237998389209}
+shape: (6, 3)
+┌─────────┬─────────────────┬─────────┐
+│ country ┆ script          ┆ len     │
+│ ---     ┆ ---             ┆ ---     │
+│ str     ┆ str             ┆ u32     │
+╞═════════╪═════════════════╪═════════╡
+│ India   ┆ ascii           ┆ 1639011 │
+│ India   ┆ devanagari      ┆ 275861  │
+│ India   ┆ other_indic     ┆ 199917  │
+│ India   ┆ latin_ext/other ┆ 758     │
+│ US      ┆ ascii           ┆ 3170004 │
+│ US      ┆ latin_ext/other ┆ 52      │
+└─────────┴─────────────────┴─────────┘
+dup (name,addr) rows: 18881
+dup name rows (lower): 706520
+
+===== test source1: 1,732,544 rows, cols=['entity_id', 'business_name', 'business_address', 'country']
+dup entity_id: 0
+shape: (3, 3)
+┌─────────┬────────┬───────┐
+│ country ┆ count  ┆ frac  │
+│ ---     ┆ ---    ┆ ---   │
+│ str     ┆ u32    ┆ f64   │
+╞═════════╪════════╪═══════╡
+│ India   ┆ 809986 ┆ 0.468 │
+│ US      ┆ 663106 ┆ 0.383 │
+│ France  ┆ 259452 ┆ 0.15  │
+└─────────┴────────┴───────┘
+business_name {'empty': 0.0, 'null_str': 8.65778877765875e-05, 'len_med': 24.0, 'len_p95': 36.0, 'upper': 1.7315577555317497e-06}
+shape: (4, 3)
+┌─────────┬─────────────────┬────────┐
+│ country ┆ script          ┆ len    │
+│ ---     ┆ ---             ┆ ---    │
+│ str     ┆ str             ┆ u32    │
+╞═════════╪═════════════════╪════════╡
+│ France  ┆ ascii           ┆ 218663 │
+│ France  ┆ latin_ext/other ┆ 40789  │
+│ India   ┆ ascii           ┆ 809986 │
+│ US      ┆ ascii           ┆ 663106 │
+└─────────┴─────────────────┴────────┘
+business_address {'empty': 0.0, 'null_str': 0.0006320185807690887, 'len_med': 50.0, 'len_p95': 105.0, 'upper': 1.1543718370211666e-06}
+shape: (5, 3)
+┌─────────┬─────────────────┬────────┐
+│ country ┆ script          ┆ len    │
+│ ---     ┆ ---             ┆ ---    │
+│ str     ┆ str             ┆ u32    │
+╞═════════╪═════════════════╪════════╡
+│ France  ┆ ascii           ┆ 186117 │
+│ France  ┆ latin_ext/other ┆ 73335  │
+│ India   ┆ ascii           ┆ 809521 │
+│ India   ┆ latin_ext/other ┆ 465    │
+│ US      ┆ ascii           ┆ 663106 │
+└─────────┴─────────────────┴────────┘
+dup (name,addr) rows: 0
+dup name rows (lower): 494300
+
+===== test source2: 4,887,273 rows, cols=['entity_id', 'business_name', 'business_address', 'country']
+dup entity_id: 0
+shape: (3, 3)
+┌─────────┬─────────┬───────┐
+│ country ┆ count   ┆ frac  │
+│ ---     ┆ ---     ┆ ---   │
+│ str     ┆ u32     ┆ f64   │
+╞═════════╪═════════╪═══════╡
+│ India   ┆ 2312565 ┆ 0.473 │
+│ US      ┆ 1871330 ┆ 0.383 │
+│ France  ┆ 703378  ┆ 0.144 │
+└─────────┴─────────┴───────┘
+business_name {'empty': 0.0, 'null_str': 9.432663164099898e-05, 'len_med': 25.0, 'len_p95': 42.0, 'upper': 0.2826029976226006}
+shape: (8, 3)
+┌─────────┬─────────────────┬─────────┐
+│ country ┆ script          ┆ len     │
+│ ---     ┆ ---             ┆ ---     │
+│ str     ┆ str             ┆ u32     │
+╞═════════╪═════════════════╪═════════╡
+│ France  ┆ ascii           ┆ 530761  │
+│ France  ┆ latin_ext/other ┆ 172617  │
+│ India   ┆ ascii           ┆ 1673951 │
+│ India   ┆ devanagari      ┆ 309103  │
+│ India   ┆ other_indic     ┆ 237503  │
+│ India   ┆ latin_ext/other ┆ 92008   │
+│ US      ┆ ascii           ┆ 1754403 │
+│ US      ┆ latin_ext/other ┆ 116927  │
+└─────────┴─────────────────┴─────────┘
+business_address {'empty': 0.02647856995097266, 'null_str': 0.029275630806791436, 'len_med': 43.0, 'len_p95': 99.0, 'upper': 0.5281959898700155}
+shape: (8, 3)
+┌─────────┬─────────────────┬─────────┐
+│ country ┆ script          ┆ len     │
+│ ---     ┆ ---             ┆ ---     │
+│ str     ┆ str             ┆ u32     │
+╞═════════╪═════════════════╪═════════╡
+│ France  ┆ ascii           ┆ 534215  │
+│ France  ┆ latin_ext/other ┆ 169163  │
+│ India   ┆ ascii           ┆ 1761104 │
+│ India   ┆ devanagari      ┆ 318369  │
+│ India   ┆ other_indic     ┆ 232204  │
+│ India   ┆ latin_ext/other ┆ 888     │
+│ US      ┆ ascii           ┆ 1871289 │
+│ US      ┆ latin_ext/other ┆ 41      │
+└─────────┴─────────────────┴─────────┘
+dup (name,addr) rows: 22642
+dup name rows (lower): 680196
+
+===== test source3: 5,082,316 rows, cols=['entity_id', 'business_name', 'business_address', 'country']
+dup entity_id: 0
+shape: (3, 3)
+┌─────────┬─────────┬───────┐
+│ country ┆ count   ┆ frac  │
+│ ---     ┆ ---     ┆ ---   │
+│ str     ┆ u32     ┆ f64   │
+╞═════════╪═════════╪═══════╡
+│ India   ┆ 2405000 ┆ 0.473 │
+│ US      ┆ 1945701 ┆ 0.383 │
+│ France  ┆ 731615  ┆ 0.144 │
+└─────────┴─────────┴───────┘
+business_name {'empty': 0.0, 'null_str': 0.00010251231918676446, 'len_med': 25.0, 'len_p95': 42.0, 'upper': 0.08728973168925348}
+shape: (8, 3)
+┌─────────┬─────────────────┬─────────┐
+│ country ┆ script          ┆ len     │
+│ ---     ┆ ---             ┆ ---     │
+│ str     ┆ str             ┆ u32     │
+╞═════════╪═════════════════╪═════════╡
+│ France  ┆ ascii           ┆ 556430  │
+│ France  ┆ latin_ext/other ┆ 175185  │
+│ India   ┆ ascii           ┆ 1967097 │
+│ India   ┆ devanagari      ┆ 181068  │
+│ India   ┆ other_indic     ┆ 139571  │
+│ India   ┆ latin_ext/other ┆ 117264  │
+│ US      ┆ ascii           ┆ 1821274 │
+│ US      ┆ latin_ext/other ┆ 124427  │
+└─────────┴─────────────────┴─────────┘
+business_address {'empty': 0.026778736308407425, 'null_str': 0.028110215893698855, 'len_med': 43.0, 'len_p95': 94.0, 'upper': 0.026978054886787835}
+shape: (8, 3)
+┌─────────┬─────────────────┬─────────┐
+│ country ┆ script          ┆ len     │
+│ ---     ┆ ---             ┆ ---     │
+│ str     ┆ str             ┆ u32     │
+╞═════════╪═════════════════╪═════════╡
+│ France  ┆ ascii           ┆ 553701  │
+│ France  ┆ latin_ext/other ┆ 177914  │
+│ India   ┆ ascii           ┆ 1853726 │
+│ India   ┆ devanagari      ┆ 319073  │
+│ India   ┆ other_indic     ┆ 231410  │
+│ India   ┆ latin_ext/other ┆ 791     │
+│ US      ┆ ascii           ┆ 1945667 │
+│ US      ┆ latin_ext/other ┆ 34      │
+└─────────┴─────────────────┴─────────┘
+dup (name,addr) rows: 16305
+dup name rows (lower): 636225
