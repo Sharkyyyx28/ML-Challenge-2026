@@ -41,12 +41,34 @@ def load_candidates(split, n1, no_all, n2_len):
     return cand
 
 
-def featurize(pairs, n1, no_all, n2_len, pool):
-    parts = []
+KEEP_COLS = ["i1", "io", "src", "label"]
+# a few feature columns kept next to validation predictions for error_analysis.py
+PROFILE_COLS = ["legal_conflict", "num_min_delta", "num_first_eq", "o_nonascii", "o_addr_missing", "n_tset"]
+
+
+def mem():
+    """Process RSS and machine-wide available RAM, for the log (Linux /proc)."""
+    rss = int(open("/proc/self/status").read().split("VmRSS:")[1].split()[0]) / 1e6
+    avail = int(open("/proc/meminfo").read().split("MemAvailable:")[1].split()[0]) / 1e6
+    return f"[RAM used {rss:.1f} GB, free {avail:.1f} GB]"
+
+
+def featurize(pairs, n1, no_all, n2_len, pool, feats=None, keep=()):
+    """Features straight into one preallocated float32 matrix, chunk by chunk, so peak memory is one
+    matrix plus one chunk (not a full feature DataFrame plus its copy). Returns (X, feats, kept) where
+    kept holds the `keep` columns (those present) for every row."""
+    X, kept = None, []
     for i in range(0, pairs.height, CHUNK):
-        parts.append(pair_features(pairs[i:i + CHUNK], n1, no_all, n2_len, pool))
-        print(f"    features {min(i + CHUNK, pairs.height):,}/{pairs.height:,}", flush=True)
-    return pl.concat(parts)
+        part = pair_features(pairs[i:i + CHUNK], n1, no_all, n2_len, pool)
+        if feats is None:
+            feats = [c for c in feature_columns(part) if c != "label"]
+        if X is None:
+            X = np.empty((pairs.height, len(feats)), dtype=np.float32)
+        X[i:i + part.height] = part.select(feats).to_numpy().astype(np.float32, copy=False)
+        kept.append(part.select([c for c in keep if c in part.columns]))
+        del part
+        print(f"    features {min(i + CHUNK, pairs.height):,}/{pairs.height:,} {mem()}", flush=True)
+    return X, feats, pl.concat(kept)
 
 
 def main():
@@ -76,18 +98,21 @@ def main():
     del cand
     print(f"train pairs {tr.height:,} (pos {tr['label'].sum():,}) | val pairs {va.height:,} ({time.time()-t0:.0f}s)")
 
-    with Pool(N_JOBS) as pool:
-        tr = featurize(tr, n1, no_all, n2_len, pool)
-        feats = [c for c in feature_columns(tr) if c != "label"]
-        Xtr, ytr = M.as_matrix(tr, feats), tr["label"].to_numpy()
-        del tr
-        va = featurize(va, n1, no_all, n2_len, pool)
-    del n1, no_all
-    Xva, yva = M.as_matrix(va, feats), va["label"].to_numpy()
-    print(f"{len(feats)} features, train matrix {Xtr.nbytes / 1e9:.1f} GB ({time.time()-t0:.0f}s)", flush=True)
+    print(mem(), flush=True)
 
-    model = M.fit(args.model, Xtr, ytr, Xva, yva, feats)
+    with Pool(N_JOBS) as pool:
+        Xtr, feats, lab = featurize(tr, n1, no_all, n2_len, pool, keep=["label"])
+        ytr = lab["label"].to_numpy()
+        del tr, lab
+        Xva, _, va = featurize(va, n1, no_all, n2_len, pool, feats, keep=KEEP_COLS + PROFILE_COLS)
+    del n1, no_all
+    yva = va["label"].to_numpy()
+    print(f"{len(feats)} features, train matrix {Xtr.nbytes / 1e9:.1f} GB ({time.time()-t0:.0f}s) {mem()}",
+          flush=True)
+
+    train_data = [Xtr, ytr]
     del Xtr, ytr
+    model = M.fit(args.model, train_data, Xva, yva, feats)   # empties train_data once the model owns a copy
     model_file = M.save(args.model, model)
     print(f"trained ({time.time()-t0:.0f}s)", flush=True)
 

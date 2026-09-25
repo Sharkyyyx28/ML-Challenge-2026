@@ -22,11 +22,16 @@ def _cuda_available():
         return False
 
 
-def fit(backend, Xtr, ytr, Xva, yva, feats):
+def fit(backend, train_data, Xva, yva, feats):
+    """train_data: [Xtr, ytr] list; cleared as soon as the library has built its own binned copy,
+    so the raw float matrix is freed before boosting starts."""
+    Xtr, ytr = train_data
     if backend == "lgb":
         import lightgbm as lgb
-        dtr = lgb.Dataset(Xtr, ytr, feature_name=feats, free_raw_data=True)
-        dva = lgb.Dataset(Xva, yva, reference=dtr)
+        dtr = lgb.Dataset(Xtr, ytr, feature_name=feats, free_raw_data=True).construct()
+        dva = lgb.Dataset(Xva, yva, reference=dtr).construct()
+        train_data.clear()
+        del Xtr, ytr
         return lgb.train(LGB_PARAMS, dtr, num_boost_round=MAX_ROUNDS["lgb"], valid_sets=[dva],
                          callbacks=[lgb.early_stopping(EARLY_STOP), lgb.log_evaluation(100)])
     import xgboost as xgb
@@ -34,6 +39,8 @@ def fit(backend, Xtr, ytr, Xva, yva, feats):
     print("xgboost device:", params["device"], flush=True)
     dtr = xgb.QuantileDMatrix(Xtr, ytr, feature_names=feats, max_bin=params["max_bin"])
     dva = xgb.QuantileDMatrix(Xva, yva, feature_names=feats, ref=dtr)
+    train_data.clear()
+    del Xtr, ytr
     return xgb.train(params, dtr, num_boost_round=MAX_ROUNDS["xgb"], evals=[(dva, "valid")],
                      early_stopping_rounds=EARLY_STOP, verbose_eval=100)
 

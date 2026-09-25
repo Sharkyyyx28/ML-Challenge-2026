@@ -40,8 +40,9 @@ def main():
     probs = []
     with Pool(N_JOBS) as pool:
         for i in range(0, cand.height, 4_000_000):
-            part = featurize(cand[i:i + 4_000_000], n1, no_all, n2_len, pool)
-            probs.append(M.predict(backend, model, M.as_matrix(part, meta["features"])))
+            X, _, _ = featurize(cand[i:i + 4_000_000], n1, no_all, n2_len, pool, meta["features"])
+            probs.append(M.predict(backend, model, X))
+            del X
             print(f"  scored {min(i + 4_000_000, cand.height):,}/{cand.height:,} ({time.time()-t0:.0f}s)", flush=True)
     del n1, no_all
     cand = cand.select("i1", "io", "src").with_columns(prob=pl.Series(np.concatenate(probs)))
