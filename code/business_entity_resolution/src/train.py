@@ -85,18 +85,26 @@ def main():
     t0 = time.time()
 
     truth, n_s1 = truth_index()
-    n1, no_all, n2_len = load_norm("train")
-    cand = load_candidates("train", n1, no_all, n2_len).with_columns(fold=(pl.col("i1") % 5).cast(pl.Int8))
-    cand = cand.join(truth.with_columns(label=pl.lit(1, pl.Int8)), on=["i1", "io", "src"], how="left") \
-               .with_columns(pl.col("label").fill_null(0))
+    # Train / validation S1 entities are chosen from ids alone, before any candidate is loaded.
     train_folds = [int(f) for f in args.train_folds.split(",")]
-    tr = cand.filter(pl.col("fold").is_in(train_folds))
+    all_i1 = pl.Series("i1", np.arange(n_s1, dtype=np.int32))
+    tr_s1 = all_i1.filter((all_i1 % 5).is_in(train_folds))
     if args.sample < 1:
-        keep = tr.select("i1").unique().sample(fraction=args.sample, seed=SEED)
-        tr = tr.join(keep, on="i1", how="semi")
+        tr_s1 = tr_s1.sample(fraction=args.sample, seed=SEED)
     val_s1 = pl.Series("i1", np.arange(args.val_fold, n_s1, 5, dtype=np.int32))
     if args.val_sample < 1:
         val_s1 = val_s1.sample(fraction=args.val_sample, seed=SEED)
+
+    n1, no_all, n2_len = load_norm("train")
+    # Context features need the FULL candidate table (every competing S1 counts), but the table is
+    # ~100M rows: keep only train/val entities' rows right after, then join labels on that subset
+    # (a label join on the full table made a second full copy and ran Kaggle out of memory).
+    cand = load_candidates("train", n1, no_all, n2_len)
+    print(f"full candidate table {cand.estimated_size() / 1e9:.1f} GB {mem()}", flush=True)
+    cand = cand.filter(pl.col("i1").is_in(pl.concat([tr_s1, val_s1]).implode()))
+    cand = cand.join(truth.with_columns(label=pl.lit(1, pl.Int8)), on=["i1", "io", "src"], how="left") \
+               .with_columns(pl.col("label").fill_null(0))
+    tr = cand.filter(pl.col("i1").is_in(tr_s1.implode()))
     va = cand.filter(pl.col("i1").is_in(val_s1.implode()))
     del cand
     print(f"train pairs {tr.height:,} (pos {tr['label'].sum():,}) | val pairs {va.height:,} ({time.time()-t0:.0f}s)")
