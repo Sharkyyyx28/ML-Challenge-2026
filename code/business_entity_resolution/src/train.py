@@ -47,9 +47,12 @@ PROFILE_COLS = ["legal_conflict", "num_min_delta", "num_first_eq", "o_nonascii",
 
 
 def mem():
-    """Process RSS and machine-wide available RAM, for the log (Linux /proc)."""
-    rss = int(open("/proc/self/status").read().split("VmRSS:")[1].split()[0]) / 1e6
-    avail = int(open("/proc/meminfo").read().split("MemAvailable:")[1].split()[0]) / 1e6
+    """Process RSS and machine-wide available RAM, for the log (Linux /proc; blank elsewhere)."""
+    try:
+        rss = int(open("/proc/self/status").read().split("VmRSS:")[1].split()[0]) / 1e6
+        avail = int(open("/proc/meminfo").read().split("MemAvailable:")[1].split()[0]) / 1e6
+    except (OSError, IndexError, ValueError):
+        return ""
     return f"[RAM used {rss:.1f} GB, free {avail:.1f} GB]"
 
 
