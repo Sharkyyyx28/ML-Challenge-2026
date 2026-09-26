@@ -52,8 +52,9 @@ cells = [
          "        print(line, end='', flush=True)",
          "    rc = p.wait()",
          "    if rc:",
-         "        oom = rc in (-9, 137)",
-         "        raise RuntimeError(f'{cmd!r} failed with exit code {rc}' + (' - KILLED, almost certainly out of RAM' if oom else ''))"),
+         "        why = {-9: ' - KILLED, almost certainly out of RAM', 137: ' - KILLED, almost certainly out of RAM',",
+         "               -11: ' - SEGFAULT inside a library (e.g. XGBoost/LightGBM)', 139: ' - SEGFAULT inside a library'}.get(rc, '')",
+         "        raise RuntimeError(f'{cmd!r} failed with exit code {rc}{why}')"),
 ]
 for m in MODULES:
     cells.append(code(f"%%writefile src/{m}", (SRC / m).read_text(encoding="utf-8")))
